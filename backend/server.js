@@ -15,7 +15,10 @@ import favicon from 'serve-favicon';
 import indexRouter from './routes/index';
 import crawlerRouter from './routes/crawler';
 
+
+
 const app = express();
+
 
 // secure the server by setting various HTTP headers
 app.use(helmet());
@@ -25,6 +28,8 @@ app.use(express.json());
 
 // only parse urlencoded bodies
 app.use(express.urlencoded({ extended: false }));
+// allow AJAX requests to skip the Same-origin policy and access resources from remote hosts
+
 
 // protect against HTTP parameter pollution attacks
 app.use(hpp());
@@ -35,8 +40,6 @@ app.use(compression());
 // parse Cookie header and populate req.cookies with an object keyed by the cookie names
 app.use(cookieParser());
 
-// allow AJAX requests to skip the Same-origin policy and access resources from remote hosts
-app.use(cors());
 
 // serve a visual favicon for the browser
 app.use(favicon(__dirname + '/favicon.ico'));
@@ -76,9 +79,18 @@ mongoose
     console.log(emoji.get('heavy_check_mark'), 'MongoDB connection success');
   });
 
+app.all('*', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://localhost:3000');
+  next();
+});
+
 // routes
+app.use(cors());
 app.use('/', indexRouter);
 app.use('/crawler', crawlerRouter);
+
+
+
 
 // setup ip address and port number
 app.set('port', process.env.PORT || 3000);

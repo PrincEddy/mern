@@ -24,6 +24,7 @@
     "mongoose": "^5.9.7",
     "morgan": "~1.10.0",
     "node-emoji": "^1.10.0",
+    "puppeteer": "^13.3.2",
     "response-time": "^2.3.2",
     "serve-favicon": "^2.5.0"
   },
